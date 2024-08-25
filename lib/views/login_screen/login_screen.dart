@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_task/utils/app_assets.dart';
@@ -10,143 +11,119 @@ import 'package:login_task/views/widgets/primary_button.dart';
 import 'package:login_task/views/widgets/primary_text.dart';
 import 'package:login_task/views/widgets/primary_textfield.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   LoginCubit loginController = LoginCubit();
 
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
-  LoginScreen({super.key});
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
         child: Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-              height: 400,
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                      color: AppColors.headingColor.withOpacity(0),
-                      spreadRadius: 0, // No spread
-                      blurRadius: 30, // High blur radius for soft edges
-                      offset: const Offset(0, 5)),
-                ],
-                gradient: LinearGradient(
-                  colors: [
-                    // AppColors.headingColor
-                    //     .withOpacity(0.2),
-                    AppColors.gradientColor2
-                        .withOpacity(0.15), // Lighter blue with opacity
-                    AppColors.gradientColor1.withOpacity(
-                        0.1), // Even lighter blue with more opacity
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [
-                    // 0.1,
-                    1,
-                    1
-                  ], // Stops to control the gradient spread
-                ),
-              )),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 200,
-              ),
-              PrimaryText(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: screenHeight * 0.05,
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: PrimaryText(
                 text: "Log in!",
-                fontSize: 64,
+                fontSize: 44,
+                align: TextAlign.left,
                 fontWeight: FontWeight.w600,
               ),
-              PrimaryTextField(
-                controller: _emailController,
-                hintText: "Email",
-                prefixIcon: AppAssets.emailIcon,
-                validator: Validations.validateEmail,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              PrimaryTextField(
-                controller: _passwordController,
-                hintText: "Password",
-                onSubmit: (value) {
-                  LoginCubit().login(
-                      _emailController.text, _passwordController.text, context);
-                },
-                prefixIcon: AppAssets.passwordIcon,
-                textInputAction: TextInputAction.done,
-                textInputType: TextInputType.visiblePassword,
-                obscureText: true,
-                validator: Validations.validatePassword,
-              ),
-
-              PrimaryButton(
-                  text: "Login",
-                  onPressed: () {
-                    debugPrint("hit");
-                    final loginCubit = context.read<LoginCubit>();
-                    loginCubit.validateLogin(
-                      _emailController.text.trim(),
-                      _passwordController.text.trim(),
-                      context,
-                    );
-                  }),
-              BlocConsumer<LoginCubit, LoginState>(builder: (context, state) {
-                if (state is LoginLoading) {
-                  return const CircularProgressIndicator(
-                    color: AppColors.whiteColor,
+            ),
+            SizedBox(
+              height: screenHeight * 0.09,
+            ),
+            PrimaryTextField(
+              controller: _emailController,
+              hintText: "Email",
+              prefixIcon: AppAssets.emailIcon,
+              validator: Validations.validateEmail,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            PrimaryTextField(
+              controller: _passwordController,
+              hintText: "Password",
+              onSubmit: (value) {
+                debugPrint("hit");
+                final loginCubit = context.read<LoginCubit>();
+                loginCubit.validateLogin(
+                  _emailController.text.trim(),
+                  _passwordController.text.trim(),
+                  context,
+                );
+              },
+              prefixIcon: AppAssets.passwordIcon,
+              textInputAction: TextInputAction.done,
+              textInputType: TextInputType.visiblePassword,
+              obscureText: true,
+              validator: Validations.validatePassword,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            BlocConsumer<LoginCubit, LoginState>(builder: (context, state) {
+              if (state is LoginLoading) {
+                return const CircularProgressIndicator(
+                  color: AppColors.whiteColor,
+                );
+              } else if (state is LoginFailure) {
+                return PrimaryText(
+                  align: TextAlign.center,
+                  color: Colors.red,
+                  text: state.errorMessage,
+                );
+              }
+              return Container();
+            }, listener: (context, state) {
+              if (state is LoginSuccess) {
+                Navigator.pushReplacementNamed(context, '/home');
+              }
+            }),
+            const SizedBox(
+              height: 20,
+            ),
+            PrimaryButton(
+                text: "Login",
+                onPressed: () {
+                  debugPrint("hit");
+                  final loginCubit = context.read<LoginCubit>();
+                  loginCubit.validateLogin(
+                    _emailController.text.trim(),
+                    _passwordController.text.trim(),
+                    context,
                   );
-                } else if (state is LoginFailure) {
-                  return PrimaryText(
-                    text: state.errorMessage,
-                  );
-                }
-                return Container();
-              }, listener: (context, state) {
-                if (state is LoginSuccess) {
-                  Navigator.pushReplacementNamed(context, '/home');
-                }
-              })
-              // BlocConsumer<LoginCubit, LoginState>(builder: (context, state) {
-              //   debugPrint("INSIDE BLOCK CONSUMER BUILDER");
-              //   if (state is LoginLoadingState) {
-              //     debugPrint("INSIDE BLOCK LOADING STATE");
-              //     return const CircularProgressIndicator(
-              //       color: AppColors.whiteColor,
-              //     );
-              //   }
-              //   debugPrint("INSIDE BLOCK LOADER BUTTON SHOW");
-              //   return PrimaryButton(
-              //       text: "Login",
-              //       onPressed: () {
-              //         debugPrint("hit");
-              //         BlocProvider.of<LoginCubit>(context).login(
-              //             _emailController.text,
-              //             _passwordController.text,
-              //             context);
-              //       });
-              // }, listener: (context, state) {
-              //   debugPrint("INSIDE BLOCK LISTENER");
-              //   if (state is LoggedInState) {
-              //     debugPrint("INSIDE BLOCK LOGGED IN STATE");
-              //     Navigator.of(context).pushReplacement(MaterialPageRoute(
-              //         builder: (context) => const HomeScreen()));
-              //   }
-              // }),
-            ],
-          ),
-        ],
+                }),
+          ],
+        ),
       ),
     ));
   }

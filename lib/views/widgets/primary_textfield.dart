@@ -35,33 +35,30 @@ class PrimaryTextField extends StatelessWidget {
       borderSide: BorderSide(color: Colors.red),
     );
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        textInputAction: textInputAction,
-        keyboardType: textInputType,
-        obscuringCharacter: "#",
-        autocorrect: true,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        style: const TextStyle(color: AppColors.whiteColor),
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: const TextStyle(color: AppColors.whiteColor),
-          prefixIcon: Padding(
-            padding: const EdgeInsets.only(bottom: 17, top: 10, left: 10),
-            child: PrimarySvgImage(assetName: prefixIcon.toString()),
-          ),
-          border: inputBorder,
-          enabledBorder: inputBorder,
-          disabledBorder: inputBorder,
-          errorBorder: errorBorder,
-          focusedBorder: inputBorder,
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      textInputAction: textInputAction,
+      keyboardType: textInputType,
+      obscuringCharacter: "#",
+      autocorrect: true,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      style: const TextStyle(color: AppColors.whiteColor),
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: const TextStyle(color: AppColors.whiteColor),
+        prefixIcon: Padding(
+          padding: const EdgeInsets.only(bottom: 17, top: 10, left: 10),
+          child: PrimarySvgImage(assetName: prefixIcon.toString()),
         ),
-        validator: validator,
-        onFieldSubmitted: onSubmit,
+        border: inputBorder,
+        enabledBorder: inputBorder,
+        disabledBorder: inputBorder,
+        errorBorder: errorBorder,
+        focusedBorder: inputBorder,
       ),
+      validator: validator,
+      onFieldSubmitted: onSubmit,
     );
   }
 }

@@ -57,7 +57,8 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   validateLogin(String email, String password, context) {
-    if (validatePassword(password, context) && validateEmail(email, context)) {
+    if (validatePassword(password, context) == true &&
+        validateEmail(email, context) == true) {
       login(email, password, context);
     }
   }
