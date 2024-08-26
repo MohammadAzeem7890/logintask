@@ -17,7 +17,9 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             PrimaryText(text: "Welcome to the Home Screen!"),
-            const SizedBox(height: 30,),
+            const SizedBox(
+              height: 30,
+            ),
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () {
@@ -25,7 +27,6 @@ class HomeScreen extends StatelessWidget {
                 Navigator.pushReplacementNamed(context, '/');
               },
             ),
-
           ],
         ),
       ),

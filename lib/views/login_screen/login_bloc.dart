@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:login_task/helper_functions/auth_error_type.dart';
 import 'package:login_task/helper_functions/global_functions.dart';
 import 'package:login_task/helper_functions/handle_exceptions.dart';
 import 'package:login_task/network/network.dart';
@@ -12,36 +11,40 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
 
   Future<void> createUser(String email, String password, context) async {
-    emit(LoginLoading());
+    emit(RegisterLoading(Constants.creatingNewUserMessage));
     try {
-      await Network.createUser(email.trim(), password.trim(), context);
+      UserCredential userCredential =
+          await Network.createUser(email.trim(), password.trim(), context);
+      if (userCredential.user != null) {
+        emit(RegistrationSuccess(
+            userCredential.user, Constants.registrationSuccessMessage));
+        emit(LoginLoading(Constants.loadingLoginMessage));
+        validateLogin(email, password, context);
+      }
     } on FirebaseAuthException catch (e) {
-      emit(LoginFailure(e.message.toString()));
-      showErrorMessage(e.code, context);
+      emit(RegistrationFailure(e.message.toString()));
     } catch (e) {
-      emit(LoginFailure(Constants.unDefinedError));
-      showErrorMessage(Constants.unDefinedError, context);
+      emit(RegistrationFailure(Constants.unDefinedError));
     }
   }
 
   Future<void> login(String email, String password, context) async {
-    emit(LoginLoading());
+    emit(LoginLoading(Constants.loadingLoginMessage));
     try {
       UserCredential userCredential =
           await Network.login(email.trim(), password.trim(), context);
       if (userCredential.user != null) {
-        debugPrint("success case in cubit");
         emit(LoginSuccess(userCredential.user));
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == Constants.userNotFoundErrorCode) {
+        emit(LoginFailure(Constants.userNotFoundErrorCode));
         createUser(email, password, context);
+      } else {
+        emit(LoginFailure(e.message.toString()));
       }
-      emit(LoginFailure(e.message.toString()));
-      showErrorMessage(e.code, context);
     } catch (e) {
       emit(LoginFailure(Constants.unDefinedError));
-      showErrorMessage(Constants.unDefinedError, context);
     }
   }
 

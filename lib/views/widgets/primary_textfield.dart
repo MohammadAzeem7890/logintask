@@ -1,8 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:login_task/utils/app_assets.dart';
 import 'package:login_task/utils/app_colors.dart';
 import 'package:login_task/views/widgets/primary_svg_image.dart';
 

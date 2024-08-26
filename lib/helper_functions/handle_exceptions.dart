@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../utils/constants.dart';
 import 'auth_error_type.dart';
@@ -13,7 +12,7 @@ class HandleExceptions {
       case AuthErrorType.wrongPassword:
         return Constants.wrongPasswordError;
       case AuthErrorType.invalidCredential:
-        return Constants.invalidCredentialsError;
+        return Constants.invalidCredentialsErrorMessage;
       case AuthErrorType.unknown:
       default:
         return Constants.unDefinedError;
