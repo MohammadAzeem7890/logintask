@@ -35,94 +35,95 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
     return SafeArea(
         child: Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      resizeToAvoidBottomInset: false,
       body: Stack(
         clipBehavior: Clip.none,
         children: [
           const LoginBackgroundImage(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: screenHeight * 0.05,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: PrimaryText(
-                    text: "Log in!",
-                    fontSize: 44,
-                    align: TextAlign.left,
-                    fontWeight: FontWeight.w600,
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 190,
                   ),
-                ),
-                SizedBox(
-                  height: screenHeight * 0.12,
-                ),
-                PrimaryTextField(
-                  controller: _emailController,
-                  hintText: "Email",
-                  prefixIcon: AppAssets.emailIcon,
-                  validator: Validations.validateEmail,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                PrimaryTextField(
-                  controller: _passwordController,
-                  hintText: "Password",
-                  onSubmit: (value) {
-                    final loginCubit = context.read<LoginCubit>();
-                    loginCubit.validateLogin(
-                      _emailController.text.trim(),
-                      _passwordController.text.trim(),
-                      context,
-                    );
-                    return null;
-                  },
-                  prefixIcon: AppAssets.passwordIcon,
-                  textInputAction: TextInputAction.done,
-                  textInputType: TextInputType.visiblePassword,
-                  obscureText: true,
-                  validator: Validations.validatePassword,
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                BlocConsumer<LoginCubit, LoginState>(builder: (context, state) {
-                  if (state is LoginLoading) {
-                    return LoginProgressWidget(message: state.message);
-                  } else if (state is RegisterLoading) {
-                    return LoginProgressWidget(message: state.message);
-                  } else if (state is RegistrationSuccess) {
-                    LoginProgressWidget(message: state.message);
-                  } else if (state is LoginFailure) {
-                    return LoginErrorMessage(message: state.errorMessage);
-                  } else if (state is RegistrationFailure) {
-                    return LoginErrorMessage(message: state.errorMessage);
-                  }
-                  return state is! LoginLoading || state is! RegisterLoading
-                      ? LoginButton(onPressed: () {
-                          final loginCubit = context.read<LoginCubit>();
-                          loginCubit.validateLogin(
-                            _emailController.text.trim(),
-                            _passwordController.text.trim(),
-                            context,
-                          );
-                        })
-                      : Container();
-                }, listener: (context, state) {
-                  if (state is LoginSuccess) {
-                    Navigator.pushReplacementNamed(context, '/home');
-                  }
-                }),
-              ],
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: PrimaryText(
+                      text: "Log in!",
+                      fontSize: 44,
+                      align: TextAlign.left,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 80,
+                  ),
+                  PrimaryTextField(
+                    controller: _emailController,
+                    hintText: "Email",
+                    prefixIcon: AppAssets.emailIcon,
+                    validator: Validations.validateEmail,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  PrimaryTextField(
+                    controller: _passwordController,
+                    hintText: "Password",
+                    onSubmit: (value) {
+                      final loginCubit = context.read<LoginCubit>();
+                      loginCubit.validateLogin(
+                        _emailController.text.trim(),
+                        _passwordController.text.trim(),
+                        context,
+                      );
+                      return null;
+                    },
+                    prefixIcon: AppAssets.passwordIcon,
+                    textInputAction: TextInputAction.done,
+                    textInputType: TextInputType.visiblePassword,
+                    obscureText: true,
+                    validator: Validations.validatePassword,
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  BlocConsumer<LoginCubit, LoginState>(
+                      builder: (context, state) {
+                    if (state is LoginLoading) {
+                      return LoginProgressWidget(message: state.message);
+                    } else if (state is RegisterLoading) {
+                      return LoginProgressWidget(message: state.message);
+                    } else if (state is RegistrationSuccess) {
+                      LoginProgressWidget(message: state.message);
+                    } else if (state is LoginFailure) {
+                      return LoginErrorMessage(message: state.errorMessage);
+                    } else if (state is RegistrationFailure) {
+                      return LoginErrorMessage(message: state.errorMessage);
+                    }
+                    return state is! LoginLoading || state is! RegisterLoading
+                        ? LoginButton(onPressed: () {
+                            final loginCubit = context.read<LoginCubit>();
+                            loginCubit.validateLogin(
+                              _emailController.text.trim(),
+                              _passwordController.text.trim(),
+                              context,
+                            );
+                          })
+                        : Container();
+                  }, listener: (context, state) {
+                    if (state is LoginSuccess) {
+                      Navigator.pushReplacementNamed(context, '/home');
+                    }
+                  }),
+                ],
+              ),
             ),
           ),
         ],
