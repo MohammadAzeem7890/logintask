@@ -107,16 +107,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     } else if (state is RegistrationFailure) {
                       return LoginErrorMessage(message: state.errorMessage);
                     }
-                    return state is! LoginLoading || state is! RegisterLoading
-                        ? LoginButton(onPressed: () {
-                            final loginCubit = context.read<LoginCubit>();
-                            loginCubit.validateLogin(
-                              _emailController.text.trim(),
-                              _passwordController.text.trim(),
-                              context,
-                            );
-                          })
-                        : Container();
+                    return Container();
+                  }, listener: (context, state) {
+                    if (state is LoginSuccess) {
+                      Navigator.pushReplacementNamed(context, '/home');
+                    }
+                  }),
+                  BlocConsumer<LoginCubit, LoginState>(
+                      builder: (context, state) {
+                    if (state is LoginLoading || state is RegisterLoading) {
+                      return Container();
+                    }
+                    return LoginButton(onPressed: () {
+                      final loginCubit = context.read<LoginCubit>();
+                      loginCubit.validateLogin(
+                        _emailController.text.trim(),
+                        _passwordController.text.trim(),
+                        context,
+                      );
+                    });
                   }, listener: (context, state) {
                     if (state is LoginSuccess) {
                       Navigator.pushReplacementNamed(context, '/home');

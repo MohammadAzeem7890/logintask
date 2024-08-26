@@ -10,6 +10,7 @@ import 'package:login_task/views/login_screen/login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
 
+
   Future<void> createUser(String email, String password, context) async {
     emit(RegisterLoading(Constants.creatingNewUserMessage));
     try {
