@@ -1,4 +1,8 @@
 class Constants {
+  static const String toDoBox = "toDoBox";
+  // collection name
+  static const String toDoListCollection = "toDoListCollection";
+  static const String toDoListCollectionBackup = "backUpCollection";
   static const passwordEmptyError = "Password can't be empty";
   static const passwordLengthError = "Password must be greater than 8 characters";
   static const passwordFormatError = "Please match following password format";

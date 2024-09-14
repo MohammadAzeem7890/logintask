@@ -1,21 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login_task/helper_functions/global_functions.dart';
 import 'package:login_task/helper_functions/handle_exceptions.dart';
+import 'package:login_task/network/hive_db.dart';
 import 'package:login_task/network/network.dart';
 import 'package:login_task/utils/constants.dart';
 import 'package:login_task/views/login_screen/login_state.dart';
 
+import '../home_screen/models/todo_list_model.dart';
+
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
 
-
   Future<void> createUser(String email, String password, context) async {
     emit(RegisterLoading(Constants.creatingNewUserMessage));
+
     try {
       UserCredential userCredential =
-          await Network.createUser(email.trim(), password.trim(), context);
+          await FirebaseDB.createUser(email.trim(), password.trim(), context);
       if (userCredential.user != null) {
         emit(RegistrationSuccess(
             userCredential.user, Constants.registrationSuccessMessage));
@@ -33,7 +37,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(LoginLoading(Constants.loadingLoginMessage));
     try {
       UserCredential userCredential =
-          await Network.login(email.trim(), password.trim(), context);
+          await FirebaseDB.login(email.trim(), password.trim(), context);
       if (userCredential.user != null) {
         emit(LoginSuccess(userCredential.user));
       }
@@ -51,7 +55,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> logOut(context) async {
     try {
-      await Network.logOut();
+      await FirebaseDB.logOut();
       emit(LoginInitial());
     } on FirebaseAuthException catch (e) {
       showErrorMessage(e.code, context);
@@ -60,9 +64,11 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+
+
   validateLogin(String email, String password, context) {
-    if (validatePassword(password, context) == true &&
-        validateEmail(email, context) == true) {
+    if (validateEmail(email, context) == true &&
+        validatePassword(password, context) == true) {
       login(email, password, context);
     }
   }

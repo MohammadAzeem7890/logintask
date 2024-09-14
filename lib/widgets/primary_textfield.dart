@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:login_task/utils/app_colors.dart';
-import 'package:login_task/views/widgets/primary_svg_image.dart';
+import 'package:login_task/widgets/primary_svg_image.dart';
 
 class PrimaryTextField extends StatelessWidget {
   TextEditingController controller;
   String? Function(String?)? validator, onSubmit;
   TextInputAction textInputAction;
   TextInputType textInputType;
+  final Widget? prefixIcon;
+  final int? maxLines;
 
-  String? label, hintText, prefixIcon;
+  String? label, hintText;
   bool obscureText;
   PrimaryTextField(
       {super.key,
       this.hintText,
+        this.maxLines,
       this.validator,
         required this.controller,
       this.label,
@@ -25,7 +28,7 @@ class PrimaryTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     InputBorder inputBorder = const UnderlineInputBorder(
-      borderSide: BorderSide(color: AppColors.whiteColor),
+      borderSide: BorderSide(color: AppColors.headingColor),
     );
     InputBorder errorBorder = const UnderlineInputBorder(
       borderSide: BorderSide(color: Colors.red),
@@ -38,15 +41,13 @@ class PrimaryTextField extends StatelessWidget {
       keyboardType: textInputType,
       obscuringCharacter: "#",
       autocorrect: true,
+      maxLines: maxLines,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: const TextStyle(color: AppColors.whiteColor),
+      style: const TextStyle(color: AppColors.headingColor),
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: const TextStyle(color: AppColors.whiteColor),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(bottom: 17, top: 10, left: 10),
-          child: PrimarySvgImage(assetName: prefixIcon.toString()),
-        ),
+        hintStyle: const TextStyle(color: AppColors.headingColor),
+        prefixIcon: prefixIcon,
         border: inputBorder,
         enabledBorder: inputBorder,
         disabledBorder: inputBorder,

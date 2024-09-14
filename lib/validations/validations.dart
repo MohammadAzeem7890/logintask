@@ -27,4 +27,27 @@ class Validations {
     }
     return null;
   }
+
+
+  static String? validateHeading(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your heading';
+    }
+    return null;
+  }
+
+  static isTextFieldEmpty(String? value) {
+    if (value == null || value.isEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+
+  static String? validateDescription(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your description';
+    }
+    return null;
+  }
 }

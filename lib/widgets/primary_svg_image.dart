@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:login_task/utils/app_assets.dart';
+import 'package:login_task/utils/app_colors.dart';
 
 class PrimarySvgImage extends StatelessWidget {
   final String assetName;
@@ -12,6 +13,7 @@ class PrimarySvgImage extends StatelessWidget {
       AppAssets.svgImagePath + assetName,
       semanticsLabel: "",
       alignment: Alignment.topLeft,
+      color: AppColors.headingColor,
     );
   }
 }

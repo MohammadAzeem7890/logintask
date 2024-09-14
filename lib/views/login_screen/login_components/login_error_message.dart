@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login_task/utils/app_colors.dart';
 
-import '../../widgets/primary_text.dart';
+import '../../../widgets/primary_text.dart';
 
 class LoginErrorMessage extends StatelessWidget {
   String message;

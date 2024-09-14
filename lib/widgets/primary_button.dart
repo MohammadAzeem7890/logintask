@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:login_task/views/widgets/primary_text.dart';
+import 'package:login_task/widgets/primary_text.dart';
 
 import '../../utils/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
+  final Color textColor, buttonColor;
   final VoidCallback onPressed;
-  const PrimaryButton({super.key, required this.text, required this.onPressed});
+  const PrimaryButton(
+      {super.key,
+      this.buttonColor = AppColors.buttonTextColor,
+      this.textColor = AppColors.whiteColor,
+      required this.text,
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +22,7 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
+          backgroundColor: buttonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
@@ -24,7 +31,7 @@ class PrimaryButton extends StatelessWidget {
         child: PrimaryText(
           text: text,
           fontSize: 16.0,
-          color: AppColors.buttonTextColor,
+          color: textColor,
           fontWeight: FontWeight.w600,
         ),
       ),
