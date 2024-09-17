@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -8,7 +8,6 @@ import 'package:login_task/network/hive_db.dart';
 import 'package:login_task/network/network.dart';
 import 'package:login_task/views/home_screen/bloc/home_state.dart';
 import 'package:login_task/views/home_screen/models/todo_list_model.dart';
-
 import '../../../helper_functions/global_functions.dart';
 import '../../../utils/constants.dart';
 import '../models/todo_list_helper_model.dart';
@@ -21,18 +20,13 @@ class HomeBloc extends Cubit<HomeState> {
   Map _todoData = {};
 
   getToDoListFromHive() {
-    print("this is get data ");
     emit(HomeBlocDataLoading());
-    print("this is get data $state");
     try {
       final data = HiveDB.getToDoList(_box);
-      print("this is to do data $data");
       emit(HomeBlocDataLoadSuccess());
       _todoData = data;
-      print("this is to do data $_todoData");
       return data;
     } catch (e) {
-      print("exception in get in home bloc : $e");
       emit(HomeBlocDataLoadFailed());
     }
   }
@@ -49,30 +43,27 @@ class HomeBloc extends Cubit<HomeState> {
       });
 
       var response = await FirebaseDB.postListItemToFirebase(itemList);
-
-      print("this is reponse: $response");
+      debugPrint("this is reponse: $response");
     } catch (e) {
-      print("could not post data to firebase: $e");
+      debugPrint("could not post data to firebase: $e");
     }
   }
 
-  syncDataWithFirebase() async {
-    if (kDebugMode) {
-      print("begin");
-    }
-    // post data to firebase every six hours
-    Future.delayed(const Duration(seconds: 1), () async {
-      try {
-        if (_todoData.isNotEmpty) {
-          // post local data to firebase
-          postDataToFirebase();
-        }
-      } catch (e) {
-        if (kDebugMode) {
-          print("could not sync hive and firebase $e");
-        }
-      }
+  scheduleHiveSyncWithFirebase() {
+    Timer(const Duration(hours: 6), () {
+      syncDataWithFirebase();
     });
+  }
+
+  syncDataWithFirebase() async {
+    try {
+      if (_todoData.isNotEmpty) {
+        // post local data to firebase
+        postDataToFirebase();
+      }
+    } catch (e) {
+      debugPrint("could not sync hive and firebase $e");
+    }
   }
 
   // Function to delete data from Hive
@@ -81,13 +72,13 @@ class HomeBloc extends Cubit<HomeState> {
       if (_box.keys.contains(key)) {
         await HiveDB.deleteEntryFromHive(_box, key);
         emit(HomeDeleteSuccess());
-        showSnackBar("Delete Success", context);
+        showToast("Delete Success");
       } else {
-        showSnackBar("Delete Failed", context);
+        showToast("Delete Failed");
         emit(HomeDeleteFailed()); // Emit failure if key not found
       }
     } catch (e) {
-      showSnackBar("Delete Failed", context);
+      showToast("Delete Failed");
       emit(HomeDeleteFailed());
     }
   }

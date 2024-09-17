@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 
-import '../utils/constants.dart';
 import '../views/home_screen/models/todo_list_model.dart';
 
 class HiveDB {

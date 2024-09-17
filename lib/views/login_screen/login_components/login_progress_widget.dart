@@ -4,8 +4,8 @@ import 'package:login_task/views/login_screen/login_components/login_error_messa
 import '../../../utils/app_colors.dart';
 
 class LoginProgressWidget extends StatelessWidget {
-  String message;
-  LoginProgressWidget({super.key, required this.message});
+  final String message;
+  const LoginProgressWidget({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {

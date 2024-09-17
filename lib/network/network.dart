@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:login_task/utils/constants.dart';
-import 'package:login_task/views/home_screen/models/todo_list_model.dart';
 
 import '../views/home_screen/models/todo_list_helper_model.dart';
 
@@ -10,15 +10,13 @@ class FirebaseDB {
   static final _db = FirebaseFirestore.instance;
 
   static Future<UserCredential> createUser(
-      String email, String password, context) async {
+      String email, String password) async {
     return await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
   }
 
   static Future postListItemToFirebase(
       List<TodoListItemHelperModel> itemList) async {
-    print("todo list in home network: $itemListå ***");
-    print("todo list in home network length: ${itemList.length}å ***");
 
     // create batch
     WriteBatch batch = _db.batch();
@@ -33,14 +31,17 @@ class FirebaseDB {
     }
     try {
       await batch.commit();
-      print("Bulk write successful!");
+      if (kDebugMode) {
+        print("Bulk write successful!");
+      }
     } catch (e) {
-      print("Bulk write FAILED : $e");
+      if (kDebugMode) {
+        print("Bulk write FAILED : $e");
+      }
     }
   }
 
-  static Future<UserCredential> login(
-      String email, String password, context) async {
+  static Future<UserCredential> login(String email, String password) async {
     return await _auth.signInWithEmailAndPassword(
         email: email, password: password);
   }

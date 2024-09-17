@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   loginCubit.validateLogin(
                     _emailController.text.trim(),
                     _passwordController.text.trim(),
-                    context,
+
                   );
                   return null;
                 },
@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   loginCubit.validateLogin(
                     _emailController.text.trim(),
                     _passwordController.text.trim(),
-                    context,
+
                   );
                 });
               }, listener: (context, state) {

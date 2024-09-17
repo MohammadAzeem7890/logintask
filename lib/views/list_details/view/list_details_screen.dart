@@ -109,7 +109,7 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
     listDetailCubit.validateEntry(
         description: _descriptionController.text,
         heading: _headingController.text,
-        context: context);
+        );
   }
 
   onUpdate() {
@@ -117,7 +117,7 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
     if (toDoItemKey.toString() != "null") {
       final TodoListItemHelperModel helperModel = getItemHelperData();
       listDetailCubit.updateItemEntry(
-          helperModel: helperModel, context: context);
+          helperModel: helperModel);
     }
   }
 
@@ -133,7 +133,7 @@ class _ListDetailsScreenState extends State<ListDetailsScreen> {
   onDelete() {
     final listDetailCubit = context.read<ListDetailsBloc>();
     if (toDoItemKey.toString() != "null") {
-      listDetailCubit.deleteToDoItem(toDoItemKey!, context);
+      listDetailCubit.deleteToDoItem(toDoItemKey!);
     }
   }
 }

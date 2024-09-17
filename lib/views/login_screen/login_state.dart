@@ -10,9 +10,7 @@ class LoginLoading extends LoginState {
 }
 
 class LoginSuccess extends LoginState {
-  final User? user;
 
-  LoginSuccess(this.user);
 }
 
 class LoginFailure extends LoginState {

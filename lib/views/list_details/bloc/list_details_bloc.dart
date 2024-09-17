@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -16,25 +15,25 @@ class ListDetailsBloc extends Cubit<ListDetailsState> {
 
   final Box<ToDoListItemModel> _box = Hive.box(Constants.toDoBox);
 
-  addEntryToHive(final heading, final description, context) {
-    print(" in add entry to hive function");
+  addEntryToHive(final heading, final description ) {
+
     emit(ListDetailsLoading());
     try {
-      print(" in try add entry to hive function");
+
       ToDoListItemModel itemModel =
       ToDoListItemModel(heading: heading, description: description);
       HiveDB.addDataToHive(box: _box, item: itemModel);
-      print(" in add entry to hive success");
+
       emit(AddListDetailsSuccess());
     } catch (e) {
-      print(" in add entry to hive failure");
+
       emit(AddListDetailsSuccess());
-      showSnackBar(e.toString(), context);
+      showToast(e.toString(), );
     }
   }
 
   updateItemEntry(
-      {required context, required TodoListItemHelperModel helperModel}) async {
+      {required , required TodoListItemHelperModel helperModel}) async {
     emit(UpdateListDetailsLoading());
     try {
       final ToDoListItemModel listItemModel = ToDoListItemModel(
@@ -42,44 +41,44 @@ class ListDetailsBloc extends Cubit<ListDetailsState> {
       HiveDB.updateEntryToHive(
           key: helperModel.itemKey, listItemModel: listItemModel, box: _box);
       emit(UpdateListDetailsSuccess());
-      showSnackBar("Data Updated Successfully", context);
+      showToast("Data Updated Successfully", );
     } catch (e) {
       emit(UpdateListDetailsFailure());
-      showSnackBar(e.toString(), context);
+      showToast(e.toString(), );
     }
   }
 
   validateEntry(
       {required String heading,
         required String description,
-        required context}) {
+        required }) {
     final bool isHeadingEmpty = Validations.isTextFieldEmpty(heading);
     final bool isDescriptionEmpty = Validations.isTextFieldEmpty(description);
     if (!isHeadingEmpty && !isDescriptionEmpty) {
-      addEntryToHive(heading, description, context);
+      addEntryToHive(heading, description, );
     } else if (isHeadingEmpty) {
-      showSnackBar("heading", context);
+      showToast("heading", );
     } else if (isDescriptionEmpty) {
-      showSnackBar("desc", context);
+      showToast("desc", );
     } else {
-      showSnackBar("message other", context);
+      showToast("message other", );
     }
   }
 
   // Function to delete data from Hive
-  Future<void> deleteToDoItem(int key, context) async {
+  Future<void> deleteToDoItem(int key, ) async {
     try {
       if (_box.keys.contains(key)) {
         await HiveDB.deleteEntryFromHive(_box, key);
         emit(DeleteListDetailsSuccess());
-        showSnackBar("Delete Success", context);
+        showToast("Delete Success", );
       } else {
-        showSnackBar("Delete Failed", context);
+        showToast("Delete Failed", );
 
         emit(DeleteListDetailsFailed()); // Emit failure if key not found
       }
     } catch (e) {
-      showSnackBar("Delete Failed", context);
+      showToast("Delete Failed", );
 
       emit(DeleteListDetailsFailed());
     }

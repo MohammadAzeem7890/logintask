@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:login_task/utils/app_colors.dart';
-import 'package:login_task/widgets/primary_svg_image.dart';
 
 class PrimaryTextField extends StatelessWidget {
-  TextEditingController controller;
-  String? Function(String?)? validator, onSubmit;
-  TextInputAction textInputAction;
-  TextInputType textInputType;
+  final TextEditingController controller;
+  final String? Function(String?)? validator, onSubmit;
+  final TextInputAction textInputAction;
+  final TextInputType textInputType;
   final Widget? prefixIcon;
   final int? maxLines;
 
-  String? label, hintText;
-  bool obscureText;
-  PrimaryTextField(
+  final String? label, hintText;
+  final bool obscureText;
+  const PrimaryTextField(
       {super.key,
       this.hintText,
         this.maxLines,

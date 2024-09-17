@@ -4,12 +4,12 @@ import '../../utils/app_colors.dart';
 
 class PrimaryText extends StatelessWidget {
   final String text;
-  double? fontSize;
-  Color color;
-  TextAlign? align;
+  final double? fontSize;
+  final Color color;
+  final TextAlign? align;
   final int? maxLines;
-  FontWeight? fontWeight;
-  PrimaryText(
+  final FontWeight? fontWeight;
+  const PrimaryText(
       {super.key,
       this.align,
         this.maxLines,

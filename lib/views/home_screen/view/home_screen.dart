@@ -1,11 +1,9 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../widgets/primary_circular_bar.dart';
 import '../../../widgets/primary_scaffold.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_state.dart';
-import '../models/todo_list_helper_model.dart';
 import '../models/todo_list_model.dart';
 import 'package:login_task/helper_functions/global_functions.dart';
 import 'home_widgets/centered_error_text.dart';
@@ -20,17 +18,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
+
   final TextEditingController _noteHeadingController = TextEditingController();
   final TextEditingController _noteDescriptionController =
       TextEditingController();
 
   final HomeBloc _homeBloc = HomeBloc();
 
-  _initiateAnimatedController() {
-    _animationController = AnimationController(
-        duration: const Duration(milliseconds: 350), vsync: this);
-  }
 
   Map _todoData = {};
 
@@ -39,9 +33,9 @@ class _HomeScreenState extends State<HomeScreen>
    _todoData = homeBloc.getToDoListFromHive();
   }
 
-  syncDataWithFirebase() {
+  scheduleHiveSyncWithFirebase() {
     final homeBloc = context.read<HomeBloc>();
-    homeBloc.syncDataWithFirebase();
+    homeBloc.scheduleHiveSyncWithFirebase();
   }
 
   onDeleteItem(dynamic key) {
@@ -68,14 +62,12 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     getListItems();
-    syncDataWithFirebase();
-    _initiateAnimatedController();
+    scheduleHiveSyncWithFirebase();
     super.initState();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
     _noteHeadingController.dispose();
     _noteDescriptionController.dispose();
     super.dispose();
